@@ -1,4 +1,6 @@
 # Metamon
+程序不涉及私钥，出问题概不负责！
+
 This is a script which can be used to autobattle, upgrade metamon, compose eggs and open eggs in metamon game. 
 
 You should install python and the requests package.
