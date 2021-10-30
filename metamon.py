@@ -32,11 +32,11 @@ class metamon(object):
         self.address_data = {"address": self.address}
         self.login_data = {"address": self.address,"msg": "LogIn", "sign": self.sign}
         self.checkBag_data = self.address_data
-        self.getWalletPropertyList_data = {"address": address, "page": "1", "pageSize": "10"}
+        self.getWalletPropertyList_data = {"address": address, "page": "1", "pageSize": "1000"}
         self.composeMonsterEgg_data = self.address_data
         self.startBattle_data = {"address": address, "battleLevel": "1", "monsterA": "", "monsterB": "299160"} # You can change monsterB to your metamon
         self.openMonsterEgg_data = self.address_data
-        self.updateMonster_data = {"nftId": "394090", "address": self.address}
+        self.updateMonster_data = {"nftId": "", "address": self.address}
     
     def login(self):
         self.login_r = json.loads(self.s.post(login_url, data=self.login_data).text)
