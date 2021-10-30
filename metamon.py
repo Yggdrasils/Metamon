@@ -34,7 +34,7 @@ class metamon(object):
         self.checkBag_data = self.address_data
         self.getWalletPropertyList_data = {"address": address, "page": "1", "pageSize": "1000"}
         self.composeMonsterEgg_data = self.address_data
-        self.startBattle_data = {"address": address, "battleLevel": "1", "monsterA": "", "monsterB": "299160"} # You can change monsterB to your metamon
+        self.startBattle_data = {"address": address, "battleLevel": "1", "monsterA": "", "monsterB": "214650"} # You can change monsterB to your metamon
         self.openMonsterEgg_data = self.address_data
         self.updateMonster_data = {"nftId": "", "address": self.address}
     
