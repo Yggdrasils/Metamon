@@ -128,11 +128,11 @@ class metamon(object):
             update_result = 1
             if update_result == 0:
                 break
-            if self.raca < 250:
+            if self.raca < 50:
                     print("RACA is not enough")
                     break
             while 1:
-                if self.raca < 250:
+                if self.raca < 50:
                     print("RACA is not enough")
                     break
                 if tear == 0:
@@ -147,7 +147,7 @@ class metamon(object):
                         lose += 1
                     exp += self.startBattle_r["data"]["challengeExp"]
                     tear -= 1
-                    self.raca -= 250
+                    self.raca -= 50
                     self.fragment += self.startBattle_r["data"]["bpFragmentNum"]
                 if exp >= exp_max:
                     update_result = self.updateMonster(id)
