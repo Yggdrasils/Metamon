@@ -101,17 +101,48 @@ class metamon(object):
         print("Totally opened", str(number), "eggs")
         print("")
 
-    def updateMonster(self, nft_id):
+    def updateMonster(self, monster):
         self.checkBag()
-        self.updateMonster_data["nftId"] = nft_id
-        if self.potion > 1:
-            self.updateMonster_r = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
-            if self.updateMonster_r["result"] == 1:
-                self.potion -= 1
-                print(nft_id, "Metamon level up!")
-        else:
-            print("potion is not enough")
-            return 0
+        id = monster["id"]
+        level = monster["level"]
+        rarity = monster["rarity"]
+        self.updateMonster_data["nftId"] = id
+        if rarity == 'N':
+            if self.potion > 1:
+                self.updateMonster_r = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
+                if self.updateMonster_r["result"] == 1:
+                    self.potion -= 1
+                    print(id, "N Metamon update to level", str(level+1)+"!")
+            else:
+                if self.egg > 0:
+                    self.openMonsterEgg(2)
+                    self.updateMonster(monster)
+                else:
+                    if self.mintable_egg > 0:
+                        self.composeMonsterEgg()
+                        self.openMonsterEgg(2)
+                        self.updateMonster(monster)
+                    else:
+                        print("Update failed")
+                        return 0
+        if rarity == 'R':
+            if self.ydiamond > 1:
+                self.updateMonster_r = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
+                if self.updateMonster_r["result"] == 1:
+                    self.ydiamond -= 1
+                    print(id, "R Metamon update to level", str(level+1)+"!")
+            else:
+                print("Update failed")
+                return 0
+        if rarity == 'SR':
+            if self.pdiamond > 1:
+                self.updateMonster_r = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
+                if self.updateMonster_r["result"] == 1:
+                    self.pdiamond -= 1
+                    print(id, "SR Metamon update to level", str(level+1)+"!")
+            else:
+                print("Update failed")
+                return 0
         return 1
 
     def startBattle(self):
@@ -121,6 +152,7 @@ class metamon(object):
             exp = monster["exp"]
             exp_max = monster["expMax"]
             tear = monster["tear"]
+            rarity = monster["rarity"]
             self.startBattle_data["monsterA"] = id
             battle = 0
             win = 0
@@ -150,11 +182,11 @@ class metamon(object):
                     self.raca -= 50
                     self.fragment += self.startBattle_r["data"]["bpFragmentNum"]
                 if exp >= exp_max:
-                    update_result = self.updateMonster(id)
+                    update_result = self.updateMonster(monster)
                     exp = 0
                 if update_result == 0:
                     break
-            print(id, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";")
+            print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";")
         print("")
 
 
