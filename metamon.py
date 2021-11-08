@@ -77,19 +77,17 @@ class metamon(object):
         print("=================")
         print("")
 
-    def composeMonsterEgg(self, number=0):
+    def composeMonsterEgg(self, number=100000):
         self.checkBag()
         compose_number = self.mintable_egg
         if number > compose_number:
-            number = compose_number
-        if number == 0:
             number = compose_number
         for i in range(number):
             self.s.post(composeMonsterEgg_url, data=self.composeMonsterEgg_data, headers=self.headers)
         print("Composed", str(number), "eggs")
         print("")
 
-    def openMonsterEgg(self, number):
+    def openMonsterEgg(self, number=100000):
         self.checkBag()
         if number > self.egg:
             number = self.egg
