@@ -89,15 +89,19 @@ class metamon(object):
         print("Composed", str(number), "eggs")
         print("")
 
-    def openMonsterEgg(self, number=0):
+    def openMonsterEgg(self, number):
         self.checkBag()
         if number > self.egg:
             number = self.egg
-        if number == 0:
-            number = self.egg
         for i in range(number):
             self.openMonsterEgg_r = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
-            print("open", self.openMonsterEgg_r["data"]["amount"], self.openMonsterEgg_r["data"]["category"])
+            if self.openMonsterEgg_r["code"] == "SUCCESS":
+                if self.openMonsterEgg_r["data"]["amount"] == "Metamon":
+                    print("open", self.openMonsterEgg_r["data"]["rarity"], self.openMonsterEgg_r["data"]["category"], self.openMonsterEgg_r["data"]["tokenId"])
+                else:
+                    print("open", self.openMonsterEgg_r["data"]["amount"], self.openMonsterEgg_r["data"]["category"])
+            else:
+                print("Open egg failed")
         print("Totally opened", str(number), "eggs")
         print("")
 
