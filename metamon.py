@@ -128,8 +128,7 @@ class metamon(object):
                     print("open", self.openMonsterEgg_r["data"]["amount"], self.openMonsterEgg_r["data"]["category"])
             else:
                 print("Open egg failed")
-        print("Totally opened", str(number), "eggs:",str(t_potion),"Potions",str(t_ydiamond),"YDiamonds",str(t_pdiamond),"PDiamonds",str(t_n),"N",str(t_r),"R",str(t_sr),"SR",str(t_ssr),"SSR")
-        print("")
+        print("Totally opened", str(number), "eggs:",str(t_potion),"Potions;",str(t_ydiamond),"YDiamonds;",str(t_pdiamond),"PDiamonds;",str(t_n),"N;",str(t_r),"R;",str(t_sr),"SR;",str(t_ssr),"SSR;")
 
     def updateMonster(self, monster):
         self.checkBag()
