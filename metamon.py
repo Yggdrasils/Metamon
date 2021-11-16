@@ -227,8 +227,8 @@ if __name__ == "__main__":
     my_metamon = metamon(address=my_address, sign=my_sign)
     my_metamon.login()
     my_metamon.getWalletPropertyList()
-    my_metamon.check()
+    my_metamon.checkBag()
     my_metamon.startBattle()    #Auto-battle, if the exp is full, it will automatically level up and if potions are not enough, it will break.
     my_metamon.composeMonsterEgg() # You can change the number, the default is max number which you can compose.
-    # my_metamon.openMonsterEgg(number=5) # You can change the number, number=0 is max number which you can compose.
+    # my_metamon.openMonsterEgg(number=10) # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
     my_metamon.check()
