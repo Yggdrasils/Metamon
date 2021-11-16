@@ -60,8 +60,16 @@ class metamon(object):
         self.mintable_egg = self.fragment // 1000
 
     def getWalletPropertyList(self):
-        self.getWalletPropertyList_r = json.loads(self.s.post(getWalletPropertyList_url, data=self.getWalletPropertyList_data, headers=self.headers).text)
-        self.metamon_list = self.getWalletPropertyList_r["data"]["metamonList"]
+        self.metamon_list = []
+        page = 1
+        while 1:
+            self.getWalletPropertyList_data["page"] = str(page)
+            self.getWalletPropertyList_r = json.loads(self.s.post(getWalletPropertyList_url, data=self.getWalletPropertyList_data, headers=self.headers).text)
+            if self.getWalletPropertyList_r["data"]["metamonList"]:
+                self.metamon_list += self.getWalletPropertyList_r["data"]["metamonList"]
+                page += 1
+            else:
+                break 
     
     def check(self):
         self.checkBag()
@@ -100,7 +108,7 @@ class metamon(object):
         for i in range(number):
             self.openMonsterEgg_r = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
             if self.openMonsterEgg_r["code"] == "SUCCESS":
-                if self.openMonsterEgg_r["data"]["amount"] == "Metamon":
+                if self.openMonsterEgg_r["data"]["category"] == "Metamon":
                     if self.openMonsterEgg_r["data"]["rarity"] == "N":
                         t_n += 1
                     if self.openMonsterEgg_r["data"]["rarity"] == "R":
