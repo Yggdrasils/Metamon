@@ -1,7 +1,9 @@
 # Metamon
 程序不涉及私钥，出问题概不负责！
 
-程序使用步骤：
+脚本支持所有平台
+
+对于电脑用户，程序使用步骤：
 
 1.下载python https://www.python.org/
 
@@ -12,6 +14,12 @@
 4.run
 
 ps：exe文件在CMD控制台运行,参考metamon_exe usage.png
+
+对于手机用户，安卓用户安装pydroid3，苹果和ipad用户安装pyto-python3
+
+在pydroid3的Terminal输入pip install requests 或 在pyto的PyPi安装requests
+
+接下来的步骤与电脑步骤一致
 
 This is a script which can be used to autobattle, upgrade metamon, compose eggs and open eggs in metamon game. 
 
