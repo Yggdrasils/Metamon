@@ -182,6 +182,13 @@ class metamon(object):
             exp_max = monster["expMax"]
             tear = monster["tear"]
             rarity = monster["rarity"]
+            level = monster["level"]
+            if level <= 20:
+                self.startBattle_data["battleLevel"] = "1"
+            if level > 20 and level <= 40:
+                self.startBattle_data["battleLevel"] = "2"
+            if level > 40:
+                self.startBattle_data["battleLevel"] = "3"
             self.startBattle_data["monsterA"] = id
             battle = 0
             win = 0
