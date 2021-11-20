@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 api_url = "https://metamon-api.radiocaca.com/usm-api/"
 login_url = api_url + "login"
@@ -91,6 +92,7 @@ class metamon(object):
             number = compose_number
         for i in range(number):
             self.s.post(composeMonsterEgg_url, data=self.composeMonsterEgg_data, headers=self.headers)
+            time.sleep(1)
         print("Composed", str(number), "eggs")
         print("")
 
@@ -107,6 +109,7 @@ class metamon(object):
             number = self.egg
         for i in range(number):
             self.openMonsterEgg_r = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
+            time.sleep(1)
             if self.openMonsterEgg_r["code"] == "SUCCESS":
                 if self.openMonsterEgg_r["data"]["category"] == "Metamon":
                     if self.openMonsterEgg_r["data"]["rarity"] == "N":
@@ -203,6 +206,7 @@ class metamon(object):
                     break
                 if exp < exp_max:
                     self.startBattle_r = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
+                    time.sleep(1)
                     battle += 1
                     if self.startBattle_r["data"]["challengeResult"] == True:
                         win += 1
