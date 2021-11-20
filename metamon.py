@@ -183,12 +183,7 @@ class metamon(object):
             tear = monster["tear"]
             rarity = monster["rarity"]
             level = monster["level"]
-            if level <= 20:
-                self.startBattle_data["battleLevel"] = "1"
-            if level > 20 and level <= 40:
-                self.startBattle_data["battleLevel"] = "2"
-            if level > 40:
-                self.startBattle_data["battleLevel"] = "3"
+            self.startBattle_data["battleLevel"] = level//21+1
             self.startBattle_data["monsterA"] = id
             battle = 0
             win = 0
@@ -196,11 +191,11 @@ class metamon(object):
             update_result = 1
             if update_result == 0:
                 break
-            if self.raca < 50:
+            if self.raca < 2**(self.startBattle_data["battleLevel"]-1)*50:
                     # print("RACA is not enough")
                     break
             while 1:
-                if self.raca < 50:
+                if self.raca < 2**(self.startBattle_data["battleLevel"]-1)*50:
                     print("RACA is not enough")
                     break
                 if tear == 0:
@@ -224,7 +219,7 @@ class metamon(object):
                     break
             if battle != 0:
                 print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
-        print("")
+
 
 
 if __name__ == "__main__":
