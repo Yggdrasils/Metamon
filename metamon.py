@@ -214,7 +214,7 @@ class metamon(object):
                         lose += 1
                     exp += self.startBattle_r["data"]["challengeExp"]
                     tear -= 1
-                    self.raca -= 50
+                    self.raca -= 2**(self.startBattle_data["battleLevel"]-1)*50
                     self.fragment += self.startBattle_r["data"]["bpFragmentNum"]
                 if exp >= exp_max:
                     update_result = self.updateMonster(monster)
