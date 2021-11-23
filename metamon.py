@@ -253,8 +253,8 @@ if __name__ == "__main__":
     my_address = "" # Your wallet address
     my_sign = "" # Your sign
     my_metamon = metamon(address=my_address, sign=my_sign)
-    # my_metamon.set_local_time("06:00")    # You can set a loacl time which scrypt will run. The time format is "xx:xx"
-    # my_metamon.set_utc_time("22:00")    # You can set a utc time which scrypt will run. The time format is "xx:xx"
+    # my_metamon.set_local_time("06:00")    # You can set a loacl time which scrypt will run. The time format is "xx:xx", hour and minute
+    # my_metamon.set_utc_time("22:00")    # You can set a utc time which scrypt will run. The time format is "xx:xx", hour and minute
     my_metamon.login()
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
