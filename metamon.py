@@ -39,6 +39,28 @@ class metamon(object):
         self.openMonsterEgg_data = self.address_data
         self.updateMonster_data = {"nftId": "394090", "address": self.address}
     
+    def set_local_time(self, local_time = "06:00"):
+        self.local_hour, self.local_minute = [int(i) for i in local_time.split(":")]
+        while 1:
+            time_now = time.localtime(time.time())
+            hour_now = time_now.tm_hour
+            minute_now = time_now.tm_min
+            if self.local_hour == hour_now and self.local_minute == minute_now:
+                break
+            else:
+                time.sleep(50)
+
+    def set_utc_time(self, utc_time = "22:00"):
+        self.utc_hour, self.utc_minute = [int(i) for i in utc_time.split(":")]
+        while 1:
+            time_now = datetime.utcfromtimestamp(time.time())
+            hour_now = time_now.hour
+            minute_now = time_now.minute
+            if self.utc_hour == hour_now and self.utc_minute == minute_now:
+                break
+            else:
+                time.sleep(50)
+    
     def login(self):
         self.login_r = json.loads(self.s.post(login_url, data=self.login_data).text)
         self.headers["accesstoken"] = self.login_r["data"]
@@ -230,6 +252,8 @@ if __name__ == "__main__":
     my_address = "" # Your wallet address
     my_sign = "" # Your sign
     my_metamon = metamon(address=my_address, sign=my_sign)
+    # my_metamon.set_local_time("06:00")    # You can set a loacl time which scrypt will run. The time format is "xx:xx"
+    # my_metamon.set_utc_time("22:00")    # You can set a utc time which scrypt will run. The time format is "xx:xx"
     my_metamon.login()
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
