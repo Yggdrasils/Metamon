@@ -220,16 +220,14 @@ class metamon(object):
             if self.raca < 2**(self.startBattle_data["battleLevel"]-1)*50:
                     # print("RACA is not enough")
                     break
-            while 1:
+            for i in range(tear):
                 if self.raca < 2**(self.startBattle_data["battleLevel"]-1)*50:
                     print("RACA is not enough")
                     break
-                if tear == 0:
-                    # print(token_id, "Metamon energy is not enough")
-                    break
                 if exp < exp_max:
                     self.startBattle_r = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
-                    time.sleep(1)
+                    if tear % 5 == 0:
+                        time.sleep(1)
                     battle += 1
                     if self.startBattle_r["data"]["challengeResult"] == True:
                         win += 1
@@ -254,7 +252,7 @@ if __name__ == "__main__":
     my_sign = "" # Your sign
     my_metamon = metamon(address=my_address, sign=my_sign)
     # my_metamon.set_local_time("06:00")    # You can set a loacl time which scrypt will run. The time format is "xx:xx", hour and minute
-    # my_metamon.set_utc_time("22:00")    # You can set a utc time which scrypt will run. The time format is "xx:xx", hour and minute
+    # my_metamon.set_utc_time("22:00")    # You can also set a utc time which scrypt will run. The time format is "xx:xx", hour and minute
     my_metamon.login()
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
