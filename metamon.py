@@ -234,12 +234,12 @@ class metamon(object):
                     self.fragment += self.startBattle_r["data"]["bpFragmentNum"]
                 if exp >= exp_max:
                     if update == 1:
-                        pass
-                    else:
                         update_result = self.updateMonster(monster)
                         exp = 0
                         if update_result == 0:
                             break
+                    else:
+                        pass
             if battle != 0:
                 print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
 
