@@ -115,7 +115,6 @@ class metamon(object):
             number = compose_number
         for i in range(number):
             self.s.post(composeMonsterEgg_url, data=self.composeMonsterEgg_data, headers=self.headers)
-            time.sleep(1)
         print("Composed", str(number), "eggs")
         print("")
 
@@ -132,7 +131,6 @@ class metamon(object):
             number = self.egg
         for i in range(number):
             self.openMonsterEgg_r = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
-            time.sleep(1)
             if self.openMonsterEgg_r["code"] == "SUCCESS":
                 if self.openMonsterEgg_r["data"]["category"] == "Metamon":
                     if self.openMonsterEgg_r["data"]["rarity"] == "N":
@@ -226,15 +224,12 @@ class metamon(object):
                     break
                 if exp < exp_max:
                     self.startBattle_r = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
-                    if tear % 5 == 0:
-                        time.sleep(1)
                     battle += 1
                     if self.startBattle_r["data"]["challengeResult"] == True:
                         win += 1
                     if self.startBattle_r["data"]["challengeResult"] == False:
                         lose += 1
                     exp += self.startBattle_r["data"]["challengeExp"]
-                    tear -= 1
                     self.raca -= 2**(self.startBattle_data["battleLevel"]-1)*50
                     self.fragment += self.startBattle_r["data"]["bpFragmentNum"]
                 if exp >= exp_max:
