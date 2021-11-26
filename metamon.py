@@ -233,10 +233,13 @@ class metamon(object):
                     self.raca -= 2**(self.startBattle_data["battleLevel"]-1)*50
                     self.fragment += self.startBattle_r["data"]["bpFragmentNum"]
                 if exp >= exp_max:
-                    update_result = self.updateMonster(monster)
-                    exp = 0
-                if update_result == 0:
-                    break
+                    if update == 1:
+                        pass
+                    else:
+                        update_result = self.updateMonster(monster)
+                        exp = 0
+                        if update_result == 0:
+                            break
             if battle != 0:
                 print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
 
@@ -251,7 +254,7 @@ if __name__ == "__main__":
     my_metamon.login()
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
-    my_metamon.startBattle()    #Auto-battle, if the exp is full, it will automatically level up and if potions are not enough, it will break.
+    my_metamon.startBattle(update=1)    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
     my_metamon.composeMonsterEgg() # You can change the number, the default is max number which you can compose.
     # my_metamon.openMonsterEgg(number=10) # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
     my_metamon.check()
