@@ -243,7 +243,7 @@ class metamon(object):
                         pass
             if battle != 0:
                 print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
-                time.sleep(1)
+                time.sleep(2)
 
 
 if __name__ == "__main__":
