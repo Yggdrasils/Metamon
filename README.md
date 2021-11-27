@@ -9,9 +9,9 @@
 
 2.安装requests包,CMD控制台/终端窗口输入 pip install requests
 
-3.输入address和sign，参考sign.png
+3.输入address,sign,msg,参考address_sign_msg.png
 
-4.run
+4.运行程序
 
 ps：exe文件在CMD控制台运行,参考metamon_exe usage.png
 
