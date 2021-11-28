@@ -231,7 +231,7 @@ class metamon(object):
                     if self.startBattle_r["data"]["challengeResult"] == False:
                         lose += 1
                     exp += self.startBattle_r["data"]["challengeExp"]
-                    self.raca -= 0 # 2**(self.startBattle_data["battleLevel"]-1)*50
+                    self.raca -= 50
                     self.fragment += self.startBattle_r["data"]["bpFragmentNum"]
                 if exp >= exp_max:
                     if update == 1:
