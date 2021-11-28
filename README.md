@@ -13,7 +13,6 @@
 
 4.运行程序
 
-ps：exe文件在CMD控制台运行,参考metamon_exe usage.png
 
 对于手机用户，安卓用户安装pydroid3，苹果和ipad用户安装pyto-python3
 
