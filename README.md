@@ -1,4 +1,21 @@
 # Metamon
+
+The script do not involve private key
+
+The script support all platforms
+
+For computer user,
+
+1.download python on https://www.python.org/
+
+2.install requests, you can type on "pip install requests" at terminal
+
+3.type on address, sign, msg in the script, refer to address_sign_msg.png
+
+4.run the script
+
+For mobilphone user, the Android should install pydroid3, refer to pydroid3.png. And iPhone and iPad user should install pyto-python3
+
 程序不涉及私钥，出问题概不负责！
 
 脚本支持所有平台
