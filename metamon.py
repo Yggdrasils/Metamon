@@ -200,7 +200,7 @@ class metamon(object):
         return 1
         
 
-    def startBattle(self, update):
+    def startBattle(self, update=1):
         for monster in self.metamon_list:
             id = monster["id"]
             exp = monster["exp"]
@@ -216,11 +216,11 @@ class metamon(object):
             update_result = 1
             if update_result == 0:
                 break
-            if self.raca < 2**(self.startBattle_data["battleLevel"]-1)*50:
+            if self.raca < 50:
                     # print("RACA is not enough")
                     break
-            for i in range(tear):
-                if self.raca < 2**(self.startBattle_data["battleLevel"]-1)*50:
+            while tear:
+                if self.raca < 50:
                     print("RACA is not enough")
                     break
                 if exp < exp_max:
@@ -231,9 +231,10 @@ class metamon(object):
                     if self.startBattle_r["data"]["challengeResult"] == False:
                         lose += 1
                     exp += self.startBattle_r["data"]["challengeExp"]
-                    self.raca -= 50
                     self.fragment += self.startBattle_r["data"]["bpFragmentNum"]
-                if exp >= exp_max:
+                    self.raca -= 50
+                    tear -= 1
+                else:
                     if update == 1:
                         update_result = self.updateMonster(monster)
                         exp = 0
