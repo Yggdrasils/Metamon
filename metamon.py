@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+import random
 from datetime import datetime
 
 api_url = "https://metamon-api.radiocaca.com/usm-api/"
@@ -153,6 +154,8 @@ class metamon(object):
                     print("open", self.openMonsterEgg_r["data"]["amount"], self.openMonsterEgg_r["data"]["category"])
             else:
                 print("Open egg failed")
+            time.sleep(2*random.random())
+
         print("Totally opened", str(number), "eggs:",str(t_potion),"Potions;",str(t_ydiamond),"YDiamonds;",str(t_pdiamond),"PDiamonds;",str(t_n),"N;",str(t_r),"R;",str(t_sr),"SR;",str(t_ssr),"SSR;")
 
     def updateMonster(self, monster):
