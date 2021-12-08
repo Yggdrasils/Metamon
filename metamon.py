@@ -30,7 +30,6 @@ class metamon(object):
         self.pdiamond = 0
         self.fragment = 0
         self.egg = 0
-        self.mintable_egg = 0
         self.metamon_list = []
 
         self.address_data = {"address": self.address}
@@ -83,7 +82,6 @@ class metamon(object):
                 self.raca = int(item["bpNum"])
             if item["bpType"] == 6:
                 self.egg = int(item["bpNum"])
-        self.mintable_egg = self.fragment // 1000
         self.materials = {"N":self.potion, "R":self.ydiamond, "SR":self.pdiamond, "SSR":self.pdiamond}
 
     def getWalletPropertyList(self):
@@ -107,18 +105,16 @@ class metamon(object):
         print("PDiamond:", self.pdiamond)
         print("Fragment:", self.fragment)
         print("Egg:", self.egg)
-        print("Mintable Egg:", self.mintable_egg)
         print("Metamon:", len(self.metamon_list))
         print("=================")
 
-    def composeMonsterEgg(self, number=100000):
+    def composeMonsterEgg(self):
         self.checkBag()
-        compose_number = self.mintable_egg
-        if number > compose_number:
-            number = compose_number
-        for i in range(number):
-            self.s.post(composeMonsterEgg_url, data=self.composeMonsterEgg_data, headers=self.headers)
-        print("Composed", str(number), "eggs")
+        res = json.loads(self.s.post(composeMonsterEgg_url, data=self.composeMonsterEgg_data, headers=self.headers).text)
+        if res["code"] == "SUCCESS":
+            print("Compose sucess")
+        else:
+            print("Compose fail")
 
     def openMonsterEgg(self, number=100000):
         self.checkBag()
@@ -147,17 +143,13 @@ class metamon(object):
         self.updateMonster_data["nftId"] = monster["id"]
         if self.materials[monster["rarity"]] >= 1:
             res = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
-            if res["result"] == 1:
+            if res["code"] == "SUCCESS":
                 self.materials[monster["rarity"]] -= 1
                 print(monster["id"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
             else:
                 print("Update failed. Materials is not enough.")
-                return 0
 
-        return 1
-        
-
-    def startBattle(self, update=1):
+    def startBattle(self, update=1, sleep_time=2):
         for monster in self.metamon_list:
             id = monster["id"]
             exp = monster["exp"]
@@ -180,30 +172,29 @@ class metamon(object):
                 if self.raca < 50:
                     print("RACA is not enough")
                     break
-                if exp < exp_max:
-                    res = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
-                    # print(res)
-                    if res["code"] == "SUCCESS":
-                        battle += 1
-                        if res["data"]["challengeResult"] == True:
-                            win += 1
-                        if res["data"]["challengeResult"] == False:
-                            lose += 1
-                        exp += res["data"]["challengeExp"]
-                        self.fragment += res["data"]["bpFragmentNum"]
-                        self.raca -= 50
-                        tear -= 1
+                res = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
+                # print(res)
+                if res["code"] == "SUCCESS":
+                    battle += 1
+                    if res["data"]["challengeResult"] == True:
+                        win += 1
+                    if res["data"]["challengeResult"] == False:
+                        lose += 1
+                    exp += res["data"]["challengeExp"]
+                    self.fragment += res["data"]["bpFragmentNum"]
+                    self.raca -= 50
+                    tear -= 1
                 else:
-                    if update == 1:
-                        update_result = self.updateMonster(monster)
+                    print(res)
+                if update == 1:
+                    if exp >= exp_max:
+                        self.updateMonster(monster)
                         exp = 0
-                        if update_result == 0:
-                            break
-                    else:
-                        pass
+                else:
+                    exp = 0
             if battle != 0:
                 print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
-                time.sleep(2)
+                time.sleep(sleep_time)
 
 if __name__ == "__main__":
     my_address = "" # Your wallet address
@@ -215,7 +206,7 @@ if __name__ == "__main__":
     my_metamon.login()
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
-    my_metamon.startBattle(update=1)    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
+    my_metamon.startBattle(update=1, sleep_time=2)    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
     my_metamon.composeMonsterEgg() # You can change the number, the default is max number which you can compose.
     # my_metamon.openMonsterEgg(number=10) # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
     my_metamon.check()
