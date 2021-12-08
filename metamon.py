@@ -38,7 +38,7 @@ class metamon(object):
         self.checkBag_data = self.address_data
         self.getWalletPropertyList_data = {"address": address, "page": "1", "pageSize": "100"}
         self.composeMonsterEgg_data = self.address_data
-        self.startBattle_data = {"address": address, "battleLevel": "1", "monsterA": "", "monsterB": "883061"} #"454193"
+        self.startBattle_data = {"address": address, "battleLevel": "1", "monsterA": "", "monsterB": "883061"} #"442383" "214650"
         self.openMonsterEgg_data = self.address_data
         self.updateMonster_data = {"nftId": "394090", "address": self.address}
     
@@ -65,34 +65,35 @@ class metamon(object):
                 time.sleep(50)
     
     def login(self):
-        self.login_r = json.loads(self.s.post(login_url, data=self.login_data).text)
-        self.headers["accesstoken"] = self.login_r["data"]
+        res = json.loads(self.s.post(login_url, data=self.login_data).text)
+        self.headers["accesstoken"] = res["data"]
 
     def checkBag(self):
-        self.checkBag_r = json.loads(self.s.post(checkBag_url, data=self.checkBag_data, headers=self.headers).text)
-        for item in self.checkBag_r["data"]["item"]:
+        res = json.loads(self.s.post(checkBag_url, data=self.checkBag_data, headers=self.headers).text)
+        for item in res["data"]["item"]:
             if item["bpType"] == 1:
-                self.fragment = item["bpNum"]
+                self.fragment = int(item["bpNum"])
             if item["bpType"] == 2:
-                self.potion = item["bpNum"]
+                self.potion = int(item["bpNum"])
             if item["bpType"] == 3:
-                self.ydiamond = item["bpNum"]
+                self.ydiamond = int(item["bpNum"])
             if item["bpType"] == 4:
-                self.pdiamond = item["bpNum"]
+                self.pdiamond = int(item["bpNum"])
             if item["bpType"] == 5:
-                self.raca = item["bpNum"]
+                self.raca = int(item["bpNum"])
             if item["bpType"] == 6:
-                self.egg = item["bpNum"]
+                self.egg = int(item["bpNum"])
         self.mintable_egg = self.fragment // 1000
+        self.materials = {"N":self.potion, "R":self.ydiamond, "SR":self.pdiamond, "SSR":self.pdiamond}
 
     def getWalletPropertyList(self):
         self.metamon_list = []
         page = 1
         while 1:
             self.getWalletPropertyList_data["page"] = str(page)
-            self.getWalletPropertyList_r = json.loads(self.s.post(getWalletPropertyList_url, data=self.getWalletPropertyList_data, headers=self.headers).text)
-            if self.getWalletPropertyList_r["data"]["metamonList"]:
-                self.metamon_list += self.getWalletPropertyList_r["data"]["metamonList"]
+            res = json.loads(self.s.post(getWalletPropertyList_url, data=self.getWalletPropertyList_data, headers=self.headers).text)
+            if res["data"]["metamonList"]:
+                self.metamon_list += res["data"]["metamonList"]
                 page += 1
             else:
                 break 
@@ -118,88 +119,41 @@ class metamon(object):
         for i in range(number):
             self.s.post(composeMonsterEgg_url, data=self.composeMonsterEgg_data, headers=self.headers)
         print("Composed", str(number), "eggs")
-        print("")
 
     def openMonsterEgg(self, number=100000):
         self.checkBag()
-        t_potion = 0
-        t_ydiamond = 0
-        t_pdiamond = 0
-        t_n = 0
-        t_r = 0
-        t_sr = 0
-        t_ssr = 0
+        t = {"Potion":0, "YDiamond":0, "PDiamond":0, "N":0, "R":0, "SR":0, "SSR":0}
         if number > self.egg:
             number = self.egg
         for i in range(number):
-            self.openMonsterEgg_r = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
-            if self.openMonsterEgg_r["code"] == "SUCCESS":
-                if self.openMonsterEgg_r["data"]["category"] == "Metamon":
-                    if self.openMonsterEgg_r["data"]["rarity"] == "N":
-                        t_n += 1
-                    if self.openMonsterEgg_r["data"]["rarity"] == "R":
-                        t_r += 1
-                    if self.openMonsterEgg_r["data"]["rarity"] == "SR":
-                        t_sr += 1
-                    if self.openMonsterEgg_r["data"]["rarity"] == "SSR":
-                        t_ssr += 1
-                    print("open", self.openMonsterEgg_r["data"]["rarity"], self.openMonsterEgg_r["data"]["category"], self.openMonsterEgg_r["data"]["tokenId"])
+            res = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
+            if res["code"] == "SUCCESS":
+                if res["data"]["category"] == "Metamon":
+                    t[res["data"]["rarity"]] += 1
+                    print("open", res["data"]["rarity"], res["data"]["category"], res["data"]["tokenId"])
                 else:
-                    if self.openMonsterEgg_r["data"]["category"] == "Potion":
-                        t_potion += 2
-                    if self.openMonsterEgg_r["data"]["category"] == "YDiamond":
-                        t_ydiamond += 1
-                    if self.openMonsterEgg_r["data"]["category"] == "PDiamond":
-                        t_pdiamond += 1
-                    print("open", self.openMonsterEgg_r["data"]["amount"], self.openMonsterEgg_r["data"]["category"])
+                    if res["data"]["category"] == "Potion":
+                        t["Potion"] += 2
+                    else:
+                        t[res["data"]["category"]] += 1
+                    print("open", res["data"]["amount"], res["data"]["category"])
             else:
                 print("Open egg failed")
-            time.sleep(2*random.random())
-
-        print("Totally opened", str(number), "eggs:",str(t_potion),"Potions;",str(t_ydiamond),"YDiamonds;",str(t_pdiamond),"PDiamonds;",str(t_n),"N;",str(t_r),"R;",str(t_sr),"SR;",str(t_ssr),"SSR;")
+            # time.sleep(2*random.random())
+        print("Totally opened", str(number), "eggs:",str(t["Potion"]),"Potion;",str(t["YDiamond"]),"YDiamond;",str(t["PDiamond"]),"PDiamond;",str(t["N"]),"N;",str(t["R"]),"R;",str(t["SR"]),"SR;",str(t["SSR"]),"SSR;")
 
     def updateMonster(self, monster):
         self.checkBag()
-        id = monster["id"]
-        level = monster["level"]
-        rarity = monster["rarity"]
-        self.updateMonster_data["nftId"] = id
-        if rarity == 'N':
-            if self.potion >= 1:
-                self.updateMonster_r = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
-                if self.updateMonster_r["result"] == 1:
-                    self.potion -= 1
-                    print(id, "N Metamon update to level", str(level+1)+"!")
+        self.updateMonster_data["nftId"] = monster["id"]
+        if self.materials[monster["rarity"]] >= 1:
+            res = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
+            if res["result"] == 1:
+                self.materials[monster["rarity"]] -= 1
+                print(monster["id"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
             else:
-                print("Update failed. Potion is not enough.")
+                print("Update failed. Materials is not enough.")
                 return 0
-        if rarity == 'R':
-            if self.ydiamond >= 1:
-                self.updateMonster_r = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
-                if self.updateMonster_r["result"] == 1:
-                    self.ydiamond -= 1
-                    print(id, "R Metamon update to level", str(level+1)+"!")
-            else:
-                print("Update failed. YDiamond is not enough.")
-                return 0
-        if rarity == 'SR':
-            if self.pdiamond >= 1:
-                self.updateMonster_r = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
-                if self.updateMonster_r["result"] == 1:
-                    self.pdiamond -= 1
-                    print(id, "SR Metamon update to level", str(level+1)+"!")
-            else:
-                print("Update failed. PDiamond is not enough.")
-                return 0
-        if rarity == 'SSR':
-            if self.pdiamond >= 1:
-                self.updateMonster_r = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
-                if self.updateMonster_r["result"] == 1:
-                    self.pdiamond -= 1
-                    print(id, "SR Metamon update to level", str(level+1)+"!")
-            else:
-                print("Update failed. PDiamond is not enough.")
-                return 0
+
         return 1
         
 
@@ -227,14 +181,14 @@ class metamon(object):
                     print("RACA is not enough")
                     break
                 if exp < exp_max:
-                    self.startBattle_r = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
+                    res = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
                     battle += 1
-                    if self.startBattle_r["data"]["challengeResult"] == True:
+                    if res["data"]["challengeResult"] == True:
                         win += 1
-                    if self.startBattle_r["data"]["challengeResult"] == False:
+                    if res["data"]["challengeResult"] == False:
                         lose += 1
-                    exp += self.startBattle_r["data"]["challengeExp"]
-                    self.fragment += self.startBattle_r["data"]["bpFragmentNum"]
+                    exp += res["data"]["challengeExp"]
+                    self.fragment += res["data"]["bpFragmentNum"]
                     self.raca -= 50
                     tear -= 1
                 else:
