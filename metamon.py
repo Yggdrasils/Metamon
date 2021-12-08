@@ -182,15 +182,17 @@ class metamon(object):
                     break
                 if exp < exp_max:
                     res = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
-                    battle += 1
-                    if res["data"]["challengeResult"] == True:
-                        win += 1
-                    if res["data"]["challengeResult"] == False:
-                        lose += 1
-                    exp += res["data"]["challengeExp"]
-                    self.fragment += res["data"]["bpFragmentNum"]
-                    self.raca -= 50
-                    tear -= 1
+                    # print(res)
+                    if res["code"] == "SUCCESS":
+                        battle += 1
+                        if res["data"]["challengeResult"] == True:
+                            win += 1
+                        if res["data"]["challengeResult"] == False:
+                            lose += 1
+                        exp += res["data"]["challengeExp"]
+                        self.fragment += res["data"]["bpFragmentNum"]
+                        self.raca -= 50
+                        tear -= 1
                 else:
                     if update == 1:
                         update_result = self.updateMonster(monster)
@@ -202,7 +204,6 @@ class metamon(object):
             if battle != 0:
                 print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
                 time.sleep(2)
-
 
 if __name__ == "__main__":
     my_address = "" # Your wallet address
