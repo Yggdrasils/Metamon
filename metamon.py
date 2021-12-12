@@ -30,6 +30,7 @@ class metamon(object):
         self.pdiamond = 0
         self.fragment = 0
         self.egg = 0
+        self.fee = 10
         self.metamon_list = []
 
         self.address_data = {"address": self.address}
@@ -165,15 +166,14 @@ class metamon(object):
             update_result = 1
             if update_result == 0:
                 break
-            if self.raca < 50:
+            if self.raca < self.fee:
                     # print("RACA is not enough")
                     break
             while tear:
-                if self.raca < 50:
+                if self.raca < self.fee:
                     print("RACA is not enough")
                     break
                 res = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
-                # print(res)
                 if res["code"] == "SUCCESS":
                     battle += 1
                     if res["data"]["challengeResult"] == True:
@@ -182,7 +182,7 @@ class metamon(object):
                         lose += 1
                     exp += res["data"]["challengeExp"]
                     self.fragment += res["data"]["bpFragmentNum"]
-                    self.raca -= 50
+                    self.raca -= self.fee
                     tear -= 1
                 else:
                     print(res)
@@ -208,5 +208,5 @@ if __name__ == "__main__":
     my_metamon.checkBag()
     my_metamon.startBattle(update=1, sleep_time=2)    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
     my_metamon.composeMonsterEgg() # You can change the number, the default is max number which you can compose.
-    # my_metamon.openMonsterEgg(number=10) # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
+    my_metamon.openMonsterEgg(number=0) # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
     my_metamon.check()
