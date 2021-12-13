@@ -2,6 +2,8 @@
 
 The script do not involve private key
 
+I will keep updating, if you have any problems, download the latest version.
+
 The script support all platforms
 
 For computer user,
@@ -17,6 +19,8 @@ For computer user,
 For mobilphone user, the Android should install pydroid3, refer to pydroid3.png. And iPhone and iPad user should install pyto-python3
 
 程序不涉及私钥，出问题概不负责！
+
+脚本将随着游戏保持更新，如果遇到问题，下载最新版脚本
 
 脚本支持所有平台
 
