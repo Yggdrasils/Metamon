@@ -119,25 +119,23 @@ class metamon(object):
 
     def openMonsterEgg(self, number=100000):
         self.checkBag()
-        t = {"Potion":0, "YDiamond":0, "PDiamond":0, "N":0, "R":0, "SR":0, "SSR":0}
+        t = {}
+        s = "Totally opened " + str(number) + " eggs:"
         if number > self.egg:
             number = self.egg
         for i in range(number):
             res = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
             if res["code"] == "SUCCESS":
-                if res["data"]["category"] == "Metamon":
-                    t[res["data"]["rarity"]] += 1
-                    print("open", res["data"]["rarity"], res["data"]["category"], res["data"]["tokenId"])
+                if t.get(res["data"]["category"]) == None:
+                    t[res["data"]["category"]] = res["data"]["amount"]
                 else:
-                    if res["data"]["category"] == "Potion":
-                        t["Potion"] += 2
-                    else:
-                        t[res["data"]["category"]] += 1
-                    print("open", res["data"]["amount"], res["data"]["category"])
+                    t[res["data"]["category"]] += res["data"]["amount"]
+                print("open", res["data"]["amount"], res["data"]["category"])
             else:
                 print("Open egg failed")
-            # time.sleep(2*random.random())
-        print("Totally opened", str(number), "eggs:",str(t["Potion"]),"Potion;",str(t["YDiamond"]),"YDiamond;",str(t["PDiamond"]),"PDiamond;",str(t["N"]),"N;",str(t["R"]),"R;",str(t["SR"]),"SR;",str(t["SSR"]),"SSR;")
+        for key in t:
+            s = s + str(t[key]) + " " + key + ";"
+        print(s)
 
     def updateMonster(self, monster):
         self.checkBag()
