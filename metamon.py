@@ -119,10 +119,10 @@ class metamon(object):
 
     def openMonsterEgg(self, number=100000):
         self.checkBag()
-        t = {}
-        s = "Totally opened " + str(number) + " eggs:"
         if number > self.egg:
             number = self.egg
+        t = {}
+        s = "Totally opened " + str(number) + " eggs:"
         for i in range(number):
             res = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
             if res["code"] == "SUCCESS":
