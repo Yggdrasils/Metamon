@@ -66,7 +66,11 @@ class metamon(object):
     
     def login(self):
         res = json.loads(self.s.post(login_url, data=self.login_data).text)
-        self.headers["accesstoken"] = res["data"]
+        if res["code"] == "SUCCESS":
+            self.headers["accesstoken"] = res["data"]
+            print("Login success")
+        else:
+            print("Login fail")
 
     def checkBag(self):
         res = json.loads(self.s.post(checkBag_url, data=self.checkBag_data, headers=self.headers).text)
