@@ -6,6 +6,6 @@
 
 addr，sign，msg设置参考单线程脚本
 
-secret参考天启.jpg
+secret参考天启.png
 
-天启代理需要将自己的IP地址设为白名单
+天启代理需要将自己的IP地址设为白名单，参考IP白名单.png
