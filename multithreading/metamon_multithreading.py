@@ -98,17 +98,12 @@ class metamon(object):
         self.materials = {"N":self.potion, "R":self.ydiamond, "SR":self.pdiamond, "SSR":self.pdiamond}
 
     def getWalletPropertyList(self):
-        self.metamon_list = []
-        page = 1
-        while 1:
-            self.getWalletPropertyList_data["page"] = str(page)
-            res = json.loads(self.s.post(getWalletPropertyList_url, data=self.getWalletPropertyList_data, headers=self.headers, proxies=self.proxies[-1]).text)
+            self.metamon_list = []
+            res = json.loads(self.s.post(getWalletPropertyList_url, data=self.getWalletPropertyList_data, headers=self.headers).text)
             if res["data"]["metamonList"]:
-                self.metamon_list += res["data"]["metamonList"]
-                page += 1
+                self.metamon_list = res["data"]["metamonList"]
             else:
-                break 
-        # self.metamon_list = list(set(self.metamon_list))
+                print("getWalletPropertyList fail")
     
     def check(self):
         self.checkBag()

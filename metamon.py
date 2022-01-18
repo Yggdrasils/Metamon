@@ -91,9 +91,9 @@ class metamon(object):
 
     def getWalletPropertyList(self):
             self.metamon_list = []
-            res = json.loads(self.s.post(getWalletPropertyList_url, data=headers=self.headers).text)
+            res = json.loads(self.s.post(getWalletPropertyList_url, data=self.getWalletPropertyList_data, headers=self.headers).text)
             if res["data"]["metamonList"]:
-                self.metamon_list += res["data"]["metamonList"]
+                self.metamon_list = res["data"]["metamonList"]
             else:
                 print("getWalletPropertyList fail")
     
@@ -195,9 +195,9 @@ class metamon(object):
                 time.sleep(sleep_time)
 
 if __name__ == "__main__":
-    my_address = "" # Your wallet address
-    my_sign = "" # Your sign
-    my_msg = ""  # Your msg
+    my_address = "0x3e9202d6c66e379f4fb31687d11a5429cbcfbca4" # Your wallet address
+    my_sign = "0x9ff5c5e2330bd3563dc3d4c816941c73597eb90dc3c325927757d41d2265d3593a694681714ddfa40c10dc7726561afda33e0d5c2b802ec1b8fdaa0b2b24c54d1c" # Your sign
+    my_msg = "LogIn-fc7637f3-2477-1c90-9473-673c5948eaec"  # Your msg
     my_metamon = metamon(address=my_address, sign=my_sign, msg=my_msg)
     # my_metamon.set_local_time("06:00")    # You can set a loacl time which scrypt will run. The time format is "xx:xx", hour and minute
     # my_metamon.set_utc_time("22:00")    # You can also set a utc time which scrypt will run. The time format is "xx:xx", hour and minute
