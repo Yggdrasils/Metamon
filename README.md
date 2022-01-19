@@ -18,6 +18,8 @@ For computer user,
 
 For mobilphone user, the Android should install pydroid3, refer to pydroid3.png. And iPhone and iPad user should install pyto-python3
 
+If you have more than one address, you can use metamon_multiaddress.py
+
 程序不涉及私钥，出问题概不负责！
 
 脚本将随着游戏保持更新，如果遇到问题，下载最新版脚本
@@ -37,3 +39,5 @@ For mobilphone user, the Android should install pydroid3, refer to pydroid3.png.
 对于手机用户，安卓用户安装pydroid3，苹果和ipad用户安装pyto-python3
 
 pydroid3运行脚本参考pydroid3.png
+
+多个游戏账户可以使用metamon_multiaddress.py
