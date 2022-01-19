@@ -36,7 +36,7 @@ class metamon(object):
         self.address_data = {"address": self.address}
         self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign}
         self.checkBag_data = self.address_data
-        self.getWalletPropertyList_data = {"address": address, "page": "1", "pageSize": "100"}
+        self.getWalletPropertyList_data = {"address": self.address, "orderType": "-1"}
         self.composeMonsterEgg_data = self.address_data
         self.startBattle_data = {"address": address, "battleLevel": "1", "monsterA": "", "monsterB": "883061"} #"454193"
         self.openMonsterEgg_data = self.address_data
@@ -91,15 +91,11 @@ class metamon(object):
 
     def getWalletPropertyList(self):
         self.metamon_list = []
-        page = 1
-        while 1:
-            self.getWalletPropertyList_data["page"] = str(page)
-            res = json.loads(self.s.post(getWalletPropertyList_url, data=self.getWalletPropertyList_data, headers=self.headers).text)
-            if res["data"]["metamonList"]:
-                self.metamon_list += res["data"]["metamonList"]
-                page += 1
-            else:
-                break 
+        res = json.loads(self.s.post(getWalletPropertyList_url, data=self.getWalletPropertyList_data, headers=self.headers).text)
+        if res["code"] == "SUCCESS":
+            self.metamon_list += res["data"]["metamonList"]
+        else:
+            print("Acquire metamon fail")
     
     def check(self):
         self.checkBag()
