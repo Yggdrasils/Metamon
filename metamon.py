@@ -204,7 +204,7 @@ if __name__ == "__main__":
     my_metamon.login()
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
-    my_metamon.startBattle(update=1, sleep_time=4*random.random())    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
+    my_metamon.startBattle(update=1, sleep_time=random.random())    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
     my_metamon.composeMonsterEgg() # You can change the number, the default is max number which you can compose.
     my_metamon.openMonsterEgg(number=0) # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
     my_metamon.check()
