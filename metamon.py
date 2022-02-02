@@ -12,6 +12,7 @@ composeMonsterEgg_url = api_url + "composeMonsterEgg"
 startBattle_url = api_url + "startBattle"
 openMonsterEgg_url = api_url + "openMonsterEgg"
 updateMonster_url = api_url + "updateMonster"
+receive_url = api_url + "activity-letter/receive"
 
 
 class metamon(object):
@@ -41,7 +42,8 @@ class metamon(object):
         self.startBattle_data = {"address": address, "battleLevel": "1", "monsterA": "", "monsterB": "883061"} #"454193"
         self.openMonsterEgg_data = self.address_data
         self.updateMonster_data = {"nftId": "394090", "address": self.address}
-    
+        self.receive_data = {"address": self.address, "code":"b5hwr4"}
+
     def set_local_time(self, local_time = "06:00"):
         self.local_hour, self.local_minute = [int(i) for i in local_time.split(":")]
         while 1:
@@ -71,6 +73,16 @@ class metamon(object):
             print("Login success")
         else:
             print("Login fail")
+    
+    def receive(self):
+        res = json.loads(self.s.post(receive_url, data=self.receive_data, headers=self.headers).text)
+        if res["code"] == "SUCCESS":
+            if res["data"]:
+                print("Receive: ", res["data"])
+            else:
+                print("Today's letters have received")
+        else:
+            print(res["message"])
 
     def checkBag(self):
         res = json.loads(self.s.post(checkBag_url, data=self.checkBag_data, headers=self.headers).text)
@@ -202,6 +214,7 @@ if __name__ == "__main__":
     # my_metamon.set_local_time("06:00")    # You can set a loacl time which scrypt will run. The time format is "xx:xx", hour and minute
     # my_metamon.set_utc_time("22:00")    # You can also set a utc time which scrypt will run. The time format is "xx:xx", hour and minute
     my_metamon.login()
+    my_metamon.receive()
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
     my_metamon.startBattle(update=1, sleep_time=random.random())    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
