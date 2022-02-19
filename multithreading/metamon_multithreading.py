@@ -39,7 +39,7 @@ class metamon(object):
         self.metamon_list = []
 
         self.address_data = {"address": self.address}
-        self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign}
+        self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign, "network":1}
         self.checkBag_data = self.address_data
         self.getWalletPropertyList_data = {"address": address, "page": "1", "pageSize": "100"}
         self.composeMonsterEgg_data = self.address_data
@@ -155,7 +155,7 @@ class metamon(object):
             res = json.loads(self.s.post(updateMonster_url, data=updateMonster_data, headers=self.headers, proxies=self.proxies[thread]).text)
             if res["code"] == "SUCCESS":
                 self.materials[monster["rarity"]] -= 1
-                print("Thread", str(thread)+":", monster["id"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
+                print("Thread", str(thread)+":", monster["tokenId"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
             else:
                 print("Update failed. Materials is not enough.")
                 return 0
@@ -206,7 +206,7 @@ class metamon(object):
                 except:
                     self.proxies[thread] = self.get_proxy()
             if battle != 0:
-                print("Thread", str(thread)+":", id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
+                print("Thread", str(thread)+":", monster["tokenId"], rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
                 t += 1
                 if t%12 == 0:
                     self.proxies[thread] = self.get_proxy()
