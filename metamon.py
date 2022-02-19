@@ -12,7 +12,6 @@ composeMonsterEgg_url = api_url + "composeMonsterEgg"
 startBattle_url = api_url + "startBattle"
 openMonsterEgg_url = api_url + "openMonsterEgg"
 updateMonster_url = api_url + "updateMonster"
-receive_url = api_url + "activity-letter/receive"
 
 
 class metamon(object):
@@ -35,14 +34,13 @@ class metamon(object):
         self.metamon_list = []
 
         self.address_data = {"address": self.address}
-        self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign}
+        self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign, "network":1}
         self.checkBag_data = self.address_data
         self.getWalletPropertyList_data = {"address": self.address, "orderType": "-1"}
         self.composeMonsterEgg_data = self.address_data
         self.startBattle_data = {"address": address, "battleLevel": "1", "monsterA": "", "monsterB": "883061"} #"454193"
         self.openMonsterEgg_data = self.address_data
         self.updateMonster_data = {"nftId": "394090", "address": self.address}
-        self.receive_data = {"address": self.address, "code":"b5hwr4"}
 
     def set_local_time(self, local_time = "06:00"):
         self.local_hour, self.local_minute = [int(i) for i in local_time.split(":")]
@@ -73,16 +71,6 @@ class metamon(object):
             print("Login success")
         else:
             print("Login fail")
-    
-    def receive(self):
-        res = json.loads(self.s.post(receive_url, data=self.receive_data, headers=self.headers).text)
-        if res["code"] == "SUCCESS":
-            if res["data"]:
-                print("Receive: ", res["data"])
-            else:
-                print("Today's letters have received")
-        else:
-            print(res["message"])
 
     def checkBag(self):
         res = json.loads(self.s.post(checkBag_url, data=self.checkBag_data, headers=self.headers).text)
@@ -156,7 +144,7 @@ class metamon(object):
             res = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
             if res["code"] == "SUCCESS":
                 self.materials[monster["rarity"]] -= 1
-                print(monster["id"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
+                print(monster["tokenId"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
             else:
                 print("Update failed. Materials is not enough.")
 
@@ -203,7 +191,7 @@ class metamon(object):
                 else:
                     exp = 0
             if battle != 0:
-                print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
+                print(monster["tokenId"], rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
                 time.sleep(sleep_time)
 
 if __name__ == "__main__":
@@ -214,7 +202,6 @@ if __name__ == "__main__":
     # my_metamon.set_local_time("06:00")    # You can set a loacl time which scrypt will run. The time format is "xx:xx", hour and minute
     # my_metamon.set_utc_time("22:00")    # You can also set a utc time which scrypt will run. The time format is "xx:xx", hour and minute
     my_metamon.login()
-    my_metamon.receive()
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
     my_metamon.startBattle(update=1, sleep_time=random.random())    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
