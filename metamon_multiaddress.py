@@ -34,7 +34,7 @@ class metamon(object):
         self.metamon_list = []
 
         self.address_data = {"address": self.address}
-        self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign}
+        self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign, "network":1}
         self.checkBag_data = self.address_data
         self.getWalletPropertyList_data = {"address": self.address, "orderType": "-1"}
         self.composeMonsterEgg_data = self.address_data
@@ -141,7 +141,7 @@ class metamon(object):
             res = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
             if res["code"] == "SUCCESS":
                 self.materials[monster["rarity"]] -= 1
-                print(monster["id"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
+                print(monster["tokenId"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
             else:
                 print("Update failed. Materials is not enough.")
 
@@ -184,7 +184,7 @@ class metamon(object):
                 else:
                     exp = 0
             if battle != 0:
-                print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
+                print(monster["tokenId"], rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
                 # time.sleep(sleep_time)
 
 
