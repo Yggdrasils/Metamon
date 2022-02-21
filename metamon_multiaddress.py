@@ -183,6 +183,7 @@ class metamon(object):
                     print(monster["tokenId"], monster["rarity"], "metamon", res["data"]["title"], res["data"]["upperMsg"], type, "+", res["data"]["upperNum"])
 
     def startBattle(self, update=1, sleep_time=2):
+        self.getWalletPropertyList()
         for monster in self.metamon_list:
             id = monster["id"]
             exp = monster["exp"]
