@@ -12,6 +12,8 @@ composeMonsterEgg_url = api_url + "composeMonsterEgg"
 startBattle_url = api_url + "startBattle"
 openMonsterEgg_url = api_url + "openMonsterEgg"
 updateMonster_url = api_url + "updateMonster"
+expUpMonster_url = api_url + "expUpMonster"
+addAttr_url = api_url + "addAttr"
 
 
 class metamon(object):
@@ -41,6 +43,8 @@ class metamon(object):
         self.startBattle_data = {"address": self.address, "battleLevel": "1", "monsterA": "", "monsterB": "883061"} #"442383" "214650"
         self.openMonsterEgg_data = self.address_data
         self.updateMonster_data = {"nftId": "394090", "address": self.address}
+        self.expUpMonster_data = {"address": self.address, "nftId":"0"}
+        self.addAttr_data = {"nftId":"0", "attrType":"1"}
 
     def set_local_time(self, local_time = "06:00"):
         self.local_hour, self.local_minute = [int(i) for i in local_time.split(":")]
@@ -141,9 +145,42 @@ class metamon(object):
             res = json.loads(self.s.post(updateMonster_url, data=self.updateMonster_data, headers=self.headers).text)
             if res["code"] == "SUCCESS":
                 self.materials[monster["rarity"]] -= 1
-                print(monster["tokenId"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
+                print(monster["id"], monster["rarity"], "Metamon update to level", str(monster["level"]+1)+"!")
             else:
-                print("Update failed. Materials is not enough.")
+                print(res["code"])
+
+    def updateAll(self):
+        for i in range(2):
+            self.getWalletPropertyList()
+            for monster in self.metamon_list:
+                if monster["exp"] >= monster["expMax"]:
+                    self.updateMonster(monster)
+                else:
+                    pass
+
+    def expUpMonster(self, lvrange=[1,60], pnumber=2):
+        for monster in self.metamon_list:
+            if lvrange[0] <= monster["level"] <= lvrange[1]:
+                self.expUpMonster_data["nftId"] = monster["id"]
+                for i in range(pnumber):
+                    res = json.loads(self.s.post(expUpMonster_url, data=self.expUpMonster_data, headers=self.headers).text)
+                    if res["code"] == "SUCCESS":
+                        print(monster["tokenId"], monster["rarity"], "metamon exp +", res["data"])
+                    else:
+                        print(res["message"])
+            else:
+                pass
+        self.updateAll()
+
+    def addAttr(self, lvrange=[1,60], type="luck"):
+        attribute = {"luck":"1", "courage":"2", "wisdom":"3", "size":"4", "stealth":"5"}
+        for monster in self.metamon_list:
+            if lvrange[0] <= monster["level"] <= lvrange[1]:
+                self.addAttr_data["nftId"] = monster["id"]
+                self.addAttr_data["attrType"] = attribute[type]
+                res = json.loads(self.s.post(addAttr_url, params={"address":self.address}, data=self.addAttr_data, headers=self.headers).text)
+                if res["code"] == "SUCCESS":
+                    print(monster["tokenId"], monster["rarity"], "metamon", res["data"]["title"], res["data"]["upperMsg"], type, "+", res["data"]["upperNum"])
 
     def startBattle(self, update=1, sleep_time=2):
         for monster in self.metamon_list:
@@ -184,12 +221,12 @@ class metamon(object):
                 else:
                     exp = 0
             if battle != 0:
-                print(monster["tokenId"], rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
-                # time.sleep(sleep_time)
+                print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
+                time.sleep(sleep_time)
 
 
 if __name__ == "__main__":
-    addr1 = ""  # If you have more than one address, you can add your addresses by youself, like addr1, addr2, addr3... and add them in addr list.
+    addr1 = "" 
     addr2 = ""
     addr = [addr1, addr2]
 
@@ -199,18 +236,42 @@ if __name__ == "__main__":
 
     msg1 = ""
     msg2 = ""
-    msg = [msg2, msg2]
+    msg = [msg1, msg2]
 
-    number = [0, 0] # This is the number that you want to open eggs. Its length must be consistent with the addr list, sign list and msg list.
+    number = [100, 200]
 
     for i in range(len(addr)):
         my_metamon = metamon(address=addr[i], sign=sign[i], msg=msg[i])
-        # my_metamon.set_local_time("06:00")    # You can set a loacl time which scrypt will run. The time format is "xx:xx", hour and minute
-        # my_metamon.set_utc_time("22:00")    # You can also set a utc time which scrypt will run. The time format is "xx:xx", hour and minute
+        # 登录参数，获取方法参考address_sign_msg.png
+        # login params, refer to address_sign_msg.png
+
+        # my_metamon.set_local_time("06:00")    
+        # my_metamon.set_utc_time("22:00")
+        # 设置定时打游戏，可以选择本地时间或者UTC时间，时间格式为"xx:xx"，"小时:分钟"
+        # You can also set a utc time which scrypt will run. The time format is "xx:xx", hour and minute
+
         my_metamon.login()
         my_metamon.getWalletPropertyList()
         my_metamon.checkBag()
-        my_metamon.startBattle(update=1, sleep_time=random.random())    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
-        my_metamon.composeMonsterEgg() # You can change the number, the default is max number which you can compose.
-        my_metamon.openMonsterEgg(number=number[i]) # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
+
+        my_metamon.expUpMonster(lvrange=[10,17], pnumber=2)
+        # 使用药水增加经验，可以选择元兽等级范围lvrange，包括区间两端元兽，可以选择使用几瓶药水，最多2瓶
+        # Using potions to add exp, you can select the level range of metamon and number of potion, up to 2 potions.
+
+        my_metamon.addAttr(lvrange=[17,19], type="luck")
+        # 使用药水增加属性，可以选择元兽等级范围lvrange，属性有luck courage wisdom size stealth
+        # Using potion to add attrbute, you can select the level range of metamon and attrbuties: luck courage wisdom size stealth
+
+        my_metamon.startBattle(update=1, sleep_time=random.random())    
+        # 自动战斗，满经验自动升级，你也可以设置update=-1以关闭自动升级
+        # Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
+        
+        my_metamon.composeMonsterEgg()
+        # 合成元兽蛋
+        # compose metamon eggs
+
+        my_metamon.openMonsterEgg(number=number[i])
+        # 开蛋，你可以设置开蛋数量，全开可以把数量设置为100000
+        # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
+        
         my_metamon.check()
