@@ -172,10 +172,10 @@ class metamon(object):
                 pass
         self.updateAll()
 
-    def addAttr(self, lvrange=[1,60], type="luck"):
+    def addAttr(self, lvrange=[1,60], scarange=[305,400], attrtype="luck"):
         attribute = {"luck":"1", "courage":"2", "wisdom":"3", "size":"4", "stealth":"5"}
         for monster in self.metamon_list:
-            if lvrange[0] <= monster["level"] <= lvrange[1]:
+            if lvrange[0] <= monster["level"] <= lvrange[1] and scarange[0]<= monster["sca"]<=scarange[1]:
                 self.addAttr_data["nftId"] = monster["id"]
                 self.addAttr_data["attrType"] = attribute[type]
                 res = json.loads(self.s.post(addAttr_url, params={"address":self.address}, data=self.addAttr_data, headers=self.headers).text)
@@ -259,9 +259,9 @@ if __name__ == "__main__":
         # 使用药水增加经验，可以选择元兽等级范围lvrange，包括区间两端元兽，可以选择使用几瓶药水，最多2瓶
         # Using potions to add exp, you can select the level range of metamon and number of potion, up to 2 potions.
 
-        my_metamon.addAttr(lvrange=[40,60], type="luck")
-        # 使用药水增加属性，可以选择元兽等级范围lvrange，属性有luck courage wisdom size stealth
-        # Using potion to add attrbute, you can select the level range of metamon and attrbuties: luck courage wisdom size stealth
+        my_metamon.addAttr(lvrange=[40,60], scarange=[305,400], attrtype="luck")
+        # 使用药水增加属性，可以选择元兽等级范围lvrange，战力范围scarange，属性有luck courage wisdom size stealth
+        # Using potion to add attrbute, you can select the level range and sca range of metamon and attrbuties: luck courage wisdom size stealth
 
         my_metamon.startBattle(update=1, sleep_time=random.random())    
         # 自动战斗，满经验自动升级，你也可以设置update=-1以关闭自动升级
