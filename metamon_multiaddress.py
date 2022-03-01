@@ -128,9 +128,9 @@ class metamon(object):
             res = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
             if res["code"] == "SUCCESS":
                 if t.get(res["data"]["category"]) == None:
-                    t[res["data"]["category"]] = res["data"]["amount"]
+                    t[res["data"]["category"]] = res["data"]["amount"] + (res["data"]["amount"]==0)
                 else:
-                    t[res["data"]["category"]] += res["data"]["amount"]
+                    t[res["data"]["category"]] += res["data"]["amount"] + (res["data"]["amount"]==0)
                 print("open", res["data"]["amount"], res["data"]["category"])
             else:
                 print("Open egg failed")
