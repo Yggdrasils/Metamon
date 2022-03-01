@@ -128,15 +128,9 @@ class metamon(object):
             res = json.loads(self.s.post(openMonsterEgg_url, data=self.openMonsterEgg_data, headers=self.headers).text)
             if res["code"] == "SUCCESS":
                 if t.get(res["data"]["category"]) == None:
-                    if t[res["data"]["category"]] == "Metamon":
-                        t["Metamon"] = 1
-                    else:
-                        t[res["data"]["category"]] = res["data"]["amount"]
+                    t[res["data"]["category"]] = res["data"]["amount"]
                 else:
-                    if t[res["data"]["category"]] == "Metamon":
-                        t["Metamon"] += 1
-                    else:
-                        t[res["data"]["category"]] += res["data"]["amount"]
+                    t[res["data"]["category"]] += res["data"]["amount"]
                 print("open", res["data"]["amount"], res["data"]["category"])
             else:
                 print("Open egg failed")
