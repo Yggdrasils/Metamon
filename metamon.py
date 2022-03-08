@@ -262,7 +262,7 @@ if __name__ == "__main__":
     # compose metamon eggs
 
     my_metamon.openMonsterEgg(number=0, sleep_time=0)
-    # 开蛋，你可以设置开蛋数量，全开可以把数量设置为100000
-    # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
+    # 开蛋，你可以设置开蛋数量和开蛋间隔，全开可以把数量设置为100000，默认间隔为0
+    # You can change the number and interval time, the default number is max number which you can compose and default interval time is zero. Uncomment will unlock the opening eggs function.
 
     my_metamon.check()
