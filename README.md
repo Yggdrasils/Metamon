@@ -20,6 +20,8 @@ For mobilphone user, the Android should install pydroid3, refer to pydroid3.png.
 
 If you have more than one address, you can use metamon_multiaddress.py
 
+reward address: 0x1fFBfe5C6c69C2C89D8a5D2F659136a9ba51dAD1
+
 程序不涉及私钥，出问题概不负责！
 
 脚本将随着游戏保持更新，如果遇到问题，下载最新版脚本
@@ -41,3 +43,5 @@ If you have more than one address, you can use metamon_multiaddress.py
 pydroid3运行脚本参考pydroid3.png
 
 多个游戏账户可以使用metamon_multiaddress.py
+
+打赏地址：0x1fFBfe5C6c69C2C89D8a5D2F659136a9ba51dAD1
