@@ -118,7 +118,7 @@ class metamon(object):
         res = json.loads(self.s.post(composeMonsterEgg_url, data=self.composeMonsterEgg_data, headers=self.headers).text)
         print(res["message"])
 
-    def openMonsterEgg(self, number=100000, sleep_time=0):
+    def openMonsterEgg(self, number=0, sleep_time=0):
         self.checkBag()
         if number > self.egg:
             number = self.egg
@@ -273,7 +273,7 @@ if __name__ == "__main__":
         # compose metamon eggs
 
         my_metamon.openMonsterEgg(number=number[i], sleep_time=0)
-        # 开蛋，你可以设置开蛋数量和开蛋间隔，全开可以把数量设置为100000，默认间隔为0
-        # You can change the number and interval time, the default number is max number which you can compose and default interval time is zero. Uncomment will unlock the opening eggs function.
+        # 开蛋，你可以设置开蛋数量和开蛋间隔，全开可以把数量设置为100000，默认开蛋数量为0，默认间隔为0
+        # You can change the number and interval time, the default number is zero and default interval time is zero. If you want to open all eggs, you can set ni=umber=10000. Uncomment will unlock the opening eggs function.
 
         my_metamon.check()
