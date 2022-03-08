@@ -122,7 +122,7 @@ class metamon(object):
         res = json.loads(self.s.post(composeMonsterEgg_url, data=self.composeMonsterEgg_data, headers=self.headers, proxies=self.proxies[-1]).text)
         print(res["message"])
 
-    def openMonsterEgg(self, number=100000):
+    def openMonsterEgg(self, number=100000, sleep_time=0):
         self.checkBag()
         t = {}
         s = "Totally opened " + str(number) + " eggs: "        
@@ -135,9 +135,10 @@ class metamon(object):
                     t[res["data"]["category"]] = res["data"]["amount"] + (res["data"]["amount"]==0)
                 else:
                     t[res["data"]["category"]] += res["data"]["amount"] + (res["data"]["amount"]==0)
-                print("open", res["data"]["amount"], res["data"]["category"])
+                print("open", res["data"]["amount"] + (res["data"]["amount"]==0), res["data"]["category"])
             else:
                 print("Open egg failed")
+            time.sleep(sleep_time)
         for key in t:
             s = s + str(t[key]) + " " + key + "; "
         print(s)
@@ -232,6 +233,6 @@ if __name__ == "__main__":
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
     my_metamon.multithreading_battle(threads)    #Auto-battle, if the exp is full, it will automatically level up. If you don't want to level up, set update=-1
-    my_metamon.composeMonsterEgg() # You can change the number, the default is max number which you can compose.
-    my_metamon.openMonsterEgg(number=0) # You can change the number, the default is max number which you can compose. Uncomment will unlock the opening eggs function.
+    my_metamon.composeMonsterEgg()    # You can change the number, the default is max number which you can compose.
+    my_metamon.openMonsterEgg(number=0, sleep_time=0)     # You can change the number and interval time, the default number is zero and default interval time is zero. Uncomment will unlock the opening eggs function.
     my_metamon.check()
