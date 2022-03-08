@@ -36,7 +36,7 @@ class metamon(object):
         self.metamon_list = []
 
         self.address_data = {"address": self.address}
-        self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign, "network":1}
+        self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign, "network":1, "clientType": "MetaMask"}
         self.checkBag_data = self.address_data
         self.getWalletPropertyList_data = {"address": self.address, "orderType": "-1"}
         self.composeMonsterEgg_data = self.address_data
@@ -71,7 +71,7 @@ class metamon(object):
     def login(self):
         res = json.loads(self.s.post(login_url, data=self.login_data).text)
         if res["code"] == "SUCCESS":
-            self.headers["accesstoken"] = res["data"]
+            self.headers["accesstoken"] = res["data"]["accessToken"]
             print("Login success")
         else:
             print("Login fail")
