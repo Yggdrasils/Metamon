@@ -131,7 +131,7 @@ class metamon(object):
                     t[res["data"]["category"]] = res["data"]["amount"] + (res["data"]["amount"]==0)
                 else:
                     t[res["data"]["category"]] += res["data"]["amount"] + (res["data"]["amount"]==0)
-                print("open", res["data"]["amount"], res["data"]["category"])
+                print("open", res["data"]["amount"] + (res["data"]["amount"]==0), res["data"]["category"])
             else:
                 print("Open egg failed")
             time.sleep(sleep_time)
