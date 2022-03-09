@@ -245,11 +245,11 @@ if __name__ == "__main__":
     my_metamon.getWalletPropertyList()
     my_metamon.checkBag()
 
-    my_metamon.expUpMonster(lvrange=[1,40], pnumber=2)
+    # my_metamon.expUpMonster(lvrange=[1,40], pnumber=2)
     # 使用药水增加经验，可以选择元兽等级范围lvrange，包括区间两端元兽，可以选择使用几瓶药水，最多2瓶
     # Using potions to add exp, you can select the level range of metamon and number of potion, up to 2 potions.
 
-    my_metamon.addAttr(lvrange=[40,60], scarange=[305,400], attrtype="luck")
+    # my_metamon.addAttr(lvrange=[40,60], scarange=[305,400], attrtype="luck")
     # 使用药水增加属性，可以选择元兽等级范围lvrange，战力范围scarange，属性有luck courage wisdom size stealth
     # Using potion to add attrbute, you can select the level range and sca range of metamon and attrbuties: luck courage wisdom size stealth
 
