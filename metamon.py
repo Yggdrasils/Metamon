@@ -181,7 +181,7 @@ class metamon(object):
                 self.addAttr_data["attrType"] = attribute[attrtype]
                 res = json.loads(self.s.post(addAttr_url, params={"address":self.address}, data=self.addAttr_data, headers=self.headers).text)
                 if res["code"] == "SUCCESS":
-                    print(monster["tokenId"], monster["rarity"], "metamon", res["data"]["title"], res["data"]["upperMsg"], type, "+", res["data"]["upperNum"])
+                    print(monster["tokenId"], monster["rarity"], "metamon", res["data"]["title"], res["data"]["upperMsg"], attrtype, "+", res["data"]["upperNum"])
 
     def startBattle(self, update=1, sleep_time=2):
         self.getWalletPropertyList()
