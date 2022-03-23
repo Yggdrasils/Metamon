@@ -14,7 +14,8 @@ openMonsterEgg_url = api_url + "openMonsterEgg"
 updateMonster_url = api_url + "updateMonster"
 expUpMonster_url = api_url + "expUpMonster"
 addAttr_url = api_url + "addAttr"
-
+sendLoginCode_url = api_url + "owner-setting/email/sendLoginCode"
+verifyLoginCode_url = api_url + "owner-setting/email/verifyLoginCode"
 
 class metamon(object):
 
@@ -76,6 +77,22 @@ class metamon(object):
         else:
             print("Login fail")
 
+    def sendLoginCode(self):
+        res = json.loads(self.s.post(sendLoginCode_url, data=self.address_data, headers=self.headers).text)
+        if res["code"] == "SUCCESS":
+            print("Send code success")
+        else:
+            print("Send code fail")
+
+    def verifyLoginCode(self):
+        code = input("Input verify code: ")
+        verifyLoginCode_data = {**self.address_data, **{"code":code}}
+        res = json.loads(self.s.post(verifyLoginCode_url, data=verifyLoginCode_data, headers=self.headers).text)
+        if res["code"] == "SUCCESS":
+            print("Verify success")
+        else:
+            print("Verify fail")
+        
     def checkBag(self):
         res = json.loads(self.s.post(checkBag_url, data=self.checkBag_data, headers=self.headers).text)
         for item in res["data"]["item"]:
@@ -241,6 +258,10 @@ if __name__ == "__main__":
     msg = [msg1, msg2]
 
     number = [100, 200]
+    
+    authentication = 0
+    # 二次验证，如果开启了二次验证值设为1，否则设为0
+    # two factor authentication, if you have opened 2FA, then set the value to 1, otherwise set it to 0
 
     for i in range(len(addr)):
         my_metamon = metamon(address=addr[i], sign=sign[i], msg=msg[i])
@@ -253,6 +274,11 @@ if __name__ == "__main__":
         # You can also set a utc time which scrypt will run. The time format is "xx:xx", hour and minute
 
         my_metamon.login()
+        
+        if authentication:
+            my_metamon.sendLoginCode()
+            my_metamon.verifyLoginCode()
+            
         my_metamon.getWalletPropertyList()
         my_metamon.checkBag()
 
