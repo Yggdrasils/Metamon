@@ -256,8 +256,13 @@ if __name__ == "__main__":
     msg1 = ""
     msg2 = ""
     msg = [msg1, msg2]
+    
+    # 如果你只有一个账号，将addr2, sign2, msg2去掉
+    # if you only have one account, you should delete addr2, sign2, msg2
 
     number = [100, 200]
+    # 开蛋数量
+    # the number of eggs which you want to open
     
     authentication = 0
     # 二次验证，如果开启了二次验证值设为1，否则设为0
