@@ -39,7 +39,7 @@ class metamon(object):
         self.address_data = {"address": self.address}
         self.login_data = {"address": self.address,"msg": self.msg, "sign": self.sign, "network":1, "clientType": "MetaMask"}
         self.checkBag_data = self.address_data
-        self.getWalletPropertyList_data = {"address": self.address, "orderType": "-1"}
+        self.getWalletPropertyList_data = {"address": self.address, "orderType": "-1", "levelUp":0}
         self.composeMonsterEgg_data = self.address_data
         self.startBattle_data = {"address": self.address, "battleLevel": "1", "monsterA": "", "monsterB": "883061"} #"442383" "214650"
         self.openMonsterEgg_data = self.address_data
@@ -237,6 +237,8 @@ class metamon(object):
                     if exp >= exp_max:
                         self.updateMonster(monster)
                         exp = 0
+                        if monster["level"] == 59:
+                            break
                 else:
                     exp = 0
             if battle != 0:
