@@ -17,6 +17,8 @@ addAttr_url = api_url + "addAttr"
 sendLoginCode_url = api_url + "owner-setting/email/sendLoginCode"
 verifyLoginCode_url = api_url + "owner-setting/email/verifyLoginCode"
 
+buy_url = "https://metamon-api.radiocaca.com/usm-api/official-sale/buy"
+
 class metamon(object):
 
     def __init__(self, address, sign, msg):
@@ -46,6 +48,7 @@ class metamon(object):
         self.updateMonster_data = {"nftId": "394090", "address": self.address}
         self.expUpMonster_data = {"address": self.address, "nftId":"0"}
         self.addAttr_data = {"nftId":"0", "attrType":"1"}
+        self.buy_data = {"address": self.address, "orderId": 111}
 
     def set_local_time(self, local_time = "06:00"):
         self.local_hour, self.local_minute = [int(i) for i in local_time.split(":")]
@@ -203,48 +206,53 @@ class metamon(object):
     def startBattle(self, update=1, sleep_time=2):
         self.getWalletPropertyList()
         for monster in self.metamon_list:
-            id = monster["id"]
-            exp = monster["exp"]
-            exp_max = monster["expMax"]
-            tear = monster["tear"]
-            rarity = monster["rarity"]
-            self.startBattle_data["monsterA"] = id
-            battle = 0
-            win = 0
-            lose = 0
-            update_result = 1
-            if update_result == 0:
-                break
-            if self.raca < self.fee:
-                    # print("RACA is not enough")
+            if monster["level"] <= 59:
+                id = monster["id"]
+                exp = monster["exp"]
+                exp_max = monster["expMax"]
+                tear = monster["tear"]
+                rarity = monster["rarity"]
+                self.startBattle_data["monsterA"] = id
+                battle = 0
+                win = 0
+                lose = 0
+                update_result = 1
+                if update_result == 0:
                     break
-            while tear:
                 if self.raca < self.fee:
-                    print("RACA is not enough")
-                    break
-                res = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
-                if res["code"] == "SUCCESS":
-                    battle += 1
-                    win += res["data"]["challengeResult"]
-                    lose += bool(1-res["data"]["challengeResult"])
-                    exp += res["data"]["challengeExp"]
-                    self.fragment += res["data"]["bpFragmentNum"]
-                    self.raca -= self.fee
-                    tear -= 1
-                else:
-                    print(res)
-                if update == 1:
-                    if exp >= exp_max:
-                        self.updateMonster(monster)
+                        # print("RACA is not enough")
+                        break
+                while tear:
+                    if self.raca < self.fee:
+                        print("RACA is not enough")
+                        break
+                    res = json.loads(self.s.post(startBattle_url, data = self.startBattle_data, headers=self.headers).text)
+                    if res["code"] == "SUCCESS":
+                        battle += 1
+                        win += res["data"]["challengeResult"]
+                        lose += bool(1-res["data"]["challengeResult"])
+                        exp += res["data"]["challengeExp"]
+                        self.fragment += res["data"]["bpFragmentNum"]
+                        self.raca -= self.fee
+                        tear -= 1
+                    else:
+                        print(res)
+                    if update == 1:
+                        if exp >= exp_max:
+                            self.updateMonster(monster)
+                            exp = 0
+                            if monster["level"] == 59:
+                                break
+                    else:
                         exp = 0
-                        if monster["level"] == 59:
-                            break
-                else:
-                    exp = 0
-            if battle != 0:
-                print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
-                time.sleep(sleep_time)
+                if battle != 0:
+                    print(id, rarity, "Metamon battled:", str(battle)+"; ", "Win:", str(win)+"; ", "Lose:", str(lose)+";", "Win rate:", str(round(win/battle*100, 2))+"%;")
+                    time.sleep(sleep_time)
 
+    def buy(self, number=20):
+        for i in range(number):
+            res = json.loads(self.s.post(buy_url, data = self.buy_data, headers=self.headers).text)
+            print(res["code"])
 
 if __name__ == "__main__":
     addr1 = "" 
@@ -288,6 +296,10 @@ if __name__ == "__main__":
             
         my_metamon.getWalletPropertyList()
         my_metamon.checkBag()
+        
+        my_metamon.buy(number=100)
+        # 购买紫药水，number为购买数量
+        # buy purple potion, the number is how much you want to buy
 
         # my_metamon.expUpMonster(lvrange=[1,40], pnumber=2)
         # 使用药水增加经验，可以选择元兽等级范围lvrange，包括区间两端元兽，可以选择使用几瓶药水，最多2瓶
